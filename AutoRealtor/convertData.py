@@ -48,6 +48,7 @@ else:
     totalimg   = np.ndarray((imgcnt, imgsize[0]*imgsize[1]*3))
 totallabel = np.ndarray((imgcnt, nclass))
 imgcnt     = 0
+previousGV = None
 for i, relpath in zip(range(nclass), paths):
     path = cwd + "/" + relpath
     flist = os.listdir(path)
@@ -55,7 +56,14 @@ for i, relpath in zip(range(nclass), paths):
         if os.path.splitext(f)[1].lower() not in valid_exts:
             continue
         fullpath = os.path.join(path, f)
-        currimg  = imread(fullpath)
+        try:
+            currimg  = imread(fullpath)
+        except IOError as e:
+            totalimg[imgcnt, :] = previousGV
+            totallabel[imgcnt, :] = 16
+            imgcnt    = imgcnt + 1
+            print (imgcnt + ' error')
+            continue
         # Convert to grayscale
         if use_gray:
             grayimg  = rgb2gray(currimg)
@@ -68,7 +76,8 @@ for i, relpath in zip(range(nclass), paths):
         totalimg[imgcnt, :] = grayvec
         totallabel[imgcnt, :] = f.split(".")[0].split("_")[1]
         imgcnt    = imgcnt + 1
-        print (imgcnt)
+        print (grayvec)
+        previousGV = grayvec
 
 # Divide total data into training and test set
 randidx  = np.random.randint(imgcnt, size=imgcnt)
