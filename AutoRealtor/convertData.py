@@ -62,7 +62,8 @@ for i, relpath in zip(range(nclass), paths):
             totalimg[imgcnt, :] = previousGV
             totallabel[imgcnt, :] = 16
             imgcnt    = imgcnt + 1
-            print (imgcnt + ' error')
+            print (imgcnt)
+            print ('error, continuing')
             continue
         # Convert to grayscale
         if use_gray:
@@ -76,7 +77,7 @@ for i, relpath in zip(range(nclass), paths):
         totalimg[imgcnt, :] = grayvec
         totallabel[imgcnt, :] = f.split(".")[0].split("_")[1]
         imgcnt    = imgcnt + 1
-        print (grayvec)
+        print (imgcnt)
         previousGV = grayvec
 
 # Divide total data into training and test set
