@@ -16,7 +16,7 @@ trainlabel = l['trainlabel']
 testimg = l['testimg']
 testlabel = l['testlabel']
 ntrain = trainimg.shape[0]
-nclass = trainlabel.shape[1]
+nclass = 16
 dim    = trainimg.shape[1]
 ntest  = testimg.shape[0]
 
@@ -30,16 +30,16 @@ print ("%d classes" % (nclass))
 # Parameters
 learning_rate   = 0.001
 training_epochs = 100
-batch_size      = 100
+batch_size      = 1
 display_step    = 10
 
 # Network
 n_input  = dim
-n_output = nclass
+n_output = 16
 weights  = {
     'wc1': tf.Variable(tf.random_normal([3, 3, 1, 64], stddev=0.1)),
     'wc2': tf.Variable(tf.random_normal([3, 3, 64, 128], stddev=0.1)),
-    'wd1': tf.Variable(tf.random_normal([8*8*128, 1024], stddev=0.1)),
+    'wd1': tf.Variable(tf.random_normal([6*6*128, 1024], stddev=0.1)),
     'wd2': tf.Variable(tf.random_normal([1024, n_output], stddev=0.1))
 }
 biases   = {
@@ -49,9 +49,10 @@ biases   = {
     'bd2': tf.Variable(tf.random_normal([n_output], stddev=0.1))
 }
 
+
 def conv_basic(_input, _w, _b, _keepratio):
     # Input
-    _input_r = tf.reshape(_input, shape=[-1, 30, 30, 1])
+    _input_r = tf.reshape(_input, shape=[-1, 72, 72, 1])
 
     # Conv1
     _conv1 = tf.nn.relu(tf.nn.bias_add(

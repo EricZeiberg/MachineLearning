@@ -75,7 +75,7 @@ for i, relpath in zip(range(nclass), paths):
         grayvec   = np.reshape(graysmall, (1, -1))
         # Save
         totalimg[imgcnt, :] = grayvec
-        totallabel[imgcnt, :] = f.split(".")[0].split("_")[1]
+        totallabel[imgcnt, :] = np.eye(nclass, nclass)[i]
         imgcnt    = imgcnt + 1
         print (imgcnt)
         previousGV = grayvec
@@ -90,7 +90,9 @@ trainlabel = totallabel[trainidx, :]
 testimg    = totalimg[testidx, :]
 testlabel  = totallabel[testidx, :]
 
-savepath = cwd + "/" + data_name + ".npz"
-np.savez(savepath, trainimg=trainimg, trainlabel=trainlabel
-         , testimg=testimg, testlabel=testlabel)
-print ("Saved to %s" % (savepath))
+print
+
+#savepath = cwd + "/" + data_name + ".npz"
+#np.savez(savepath, trainimg=trainimg, trainlabel=trainlabel
+         #, testimg=testimg, testlabel=testlabel)
+#print ("Saved to %s" % (savepath))
