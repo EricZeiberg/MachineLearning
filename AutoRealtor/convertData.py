@@ -7,7 +7,7 @@ cwd = os.getcwd()
 # Training set folder
 paths = {"images/"}
 # The reshape size
-imgsize = [144, 144]
+imgsize = [72, 72]
 # Grayscale
 use_gray = 0
 # Save name
