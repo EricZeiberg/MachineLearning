@@ -5,7 +5,8 @@ from scipy.misc import imread, imresize
 
 cwd = os.getcwd()
 # Training set folder
-paths = {"images/"}
+paths = {"images/1", "images/2", "images/3", "images/4", "images/5", "images/6", "images/7", "images/8", "images/9", "images/10", "images/11", "images/12", "images/13",
+ "images/14", "images/15", "images/16", }
 # The reshape size
 imgsize = [72, 72]
 # Grayscale
@@ -45,7 +46,7 @@ def rgb2gray(rgb):
 if use_gray:
     totalimg   = np.ndarray((imgcnt, imgsize[0]*imgsize[1]))
 else:
-    totalimg   = np.ndarray((imgcnt, imgsize[0]*imgsize[1]*3))
+    totalimg   = np.ndarray((imgcnt, imgsize[0], imgsize[1], 3))
 totallabel = np.ndarray((imgcnt, nclass))
 imgcnt     = 0
 previousGV = None
@@ -72,12 +73,11 @@ for i, relpath in zip(range(nclass), paths):
             grayimg  = currimg
         # Reshape
         graysmall = imresize(grayimg, [imgsize[0], imgsize[1]])/255.
-        grayvec   = np.reshape(graysmall, (1, -1))
+        grayvec   = graysmall
         # Save
         totalimg[imgcnt, :] = grayvec
         totallabel[imgcnt, :] = np.eye(nclass, nclass)[i]
         imgcnt    = imgcnt + 1
-        print (imgcnt)
         previousGV = grayvec
 
 # Divide total data into training and test set
@@ -90,9 +90,8 @@ trainlabel = totallabel[trainidx, :]
 testimg    = totalimg[testidx, :]
 testlabel  = totallabel[testidx, :]
 
-print
 
-#savepath = cwd + "/" + data_name + ".npz"
-#np.savez(savepath, trainimg=trainimg, trainlabel=trainlabel
-         #, testimg=testimg, testlabel=testlabel)
-#print ("Saved to %s" % (savepath))
+savepath = cwd + "/" + data_name + ".npz"
+np.savez(savepath, trainimg=trainimg, trainlabel=trainlabel
+         , testimg=testimg, testlabel=testlabel)
+print("Saved to %s" % (savepath))
