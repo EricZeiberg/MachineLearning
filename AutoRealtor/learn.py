@@ -28,11 +28,11 @@ Y = l['trainlabel']
 X_test = l['testimg']
 Y_test = l['testlabel']
 
-Y = to_categorical(Y, 10)
-Y_test = to_categorical(Y_test, 10)
-
 print(X.shape)
 print(Y.shape)
+
+nclass = 16
+
 # Real-time data preprocessing
 img_prep = ImagePreprocessing()
 img_prep.add_featurewise_zero_center()
@@ -55,12 +55,12 @@ network = conv_2d(network, 64, 3, activation='relu')
 network = max_pool_2d(network, 2)
 network = fully_connected(network, 512, activation='relu')
 network = dropout(network, 0.5)
-network = fully_connected(network, 10, activation='softmax')
+network = fully_connected(network, nclass, activation='softmax')
 network = regression(network, optimizer='adam',
                      loss='categorical_crossentropy',
                      learning_rate=0.001)
 
 # Train using classifier
-model = tflearn.DNN(network, tensorboard_verbose=0)
+model = tflearn.DNN(network, tensorboard_verbose=0, checkpoint_path="checkpoints/")
 model.fit(X, Y, n_epoch=50, shuffle=True, validation_set=(X_test, Y_test),
           show_metric=True, batch_size=10, run_id='cifar10_cnn')
