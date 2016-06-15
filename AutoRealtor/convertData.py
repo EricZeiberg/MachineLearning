@@ -1,6 +1,5 @@
 import numpy as np
 import os
-#import matplotlib.pyplot as plt
 from scipy.misc import imread, imresize
 
 cwd = os.getcwd()
@@ -8,19 +7,11 @@ cwd = os.getcwd()
 paths = {"images/1", "images/2", "images/3", "images/4", "images/5", "images/6", "images/7", "images/8", "images/9", "images/10", "images/11", "images/12", "images/13",
  "images/14", "images/15", "images/16", }
 # The reshape size
-imgsize = [72, 72]
-# Grayscale
-use_gray = 0
+imgsize = [36, 36]
 # Save name
 data_name = "processedData"
 
 
-# First, check the total number of training data
-"""
- The reason for doing this a priori is that
- it is better to pre-allocate memory rather than
- dynamically adjust the size of the matrix.
-"""
 valid_exts = [".jpg",".gif",".png",".tga", ".jpeg"]
 imgcnt = 0
 nclass = len(paths)
@@ -36,17 +27,7 @@ for relpath in paths:
 print ("Number of total images is %d" % (imgcnt))
 
 # Then, let's save them!
-# Grayscale
-def rgb2gray(rgb):
-    if len(currimg.shape) is 3:
-        return np.dot(rgb[...,:3], [0.299, 0.587, 0.114])
-    else:
-        print ("Current Image if GRAY!")
-        return rgb
-if use_gray:
-    totalimg   = np.ndarray((imgcnt, imgsize[0]*imgsize[1]))
-else:
-    totalimg   = np.ndarray((imgcnt, imgsize[0], imgsize[1], 3))
+totalimg   = np.ndarray((imgcnt, imgsize[0], imgsize[1], 3))
 totallabel = np.ndarray((imgcnt, nclass))
 imgcnt     = 0
 previousGV = None
@@ -66,11 +47,7 @@ for i, relpath in zip(range(nclass), paths):
             print (imgcnt)
             print ('error, continuing')
             continue
-        # Convert to grayscale
-        if use_gray:
-            grayimg  = rgb2gray(currimg)
-        else:
-            grayimg  = currimg
+        grayimg  = currimg
         # Reshape
         graysmall = imresize(grayimg, [imgsize[0], imgsize[1]])/255.
         grayvec   = graysmall
@@ -78,6 +55,7 @@ for i, relpath in zip(range(nclass), paths):
         totalimg[imgcnt, :] = grayvec
         totallabel[imgcnt, :] = np.eye(nclass, nclass)[i]
         imgcnt    = imgcnt + 1
+        print(imgcnt)
         previousGV = grayvec
 
 # Divide total data into training and test set
