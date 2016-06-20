@@ -33,6 +33,8 @@ Y = l['trainlabel']
 X_test = l['testimg']
 Y_test = l['testlabel']
 
+print(Y.shape)
+
 nclass = 16
 
 # Real-time data preprocessing
